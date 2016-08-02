@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Mass Flow Thermal System</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+sys1=system();
+
+fig1=diagram([300,200],sys1);
+
+fig1.vessel([100,50],[100,100],0,['θ, σ, ρ, V',[0,35]]);
+fig1.pipe([ 25, 70],[100, 70],8);
+fig1.pipe([200,130],[275,130],8);
+
+fig1.mixer([175,75],[175,25],16);
+
+fig1.coil([60,110],[120,110],27,5);
+
+fig1.lArrow([ 30, 55],[75, 55],'θᵢ(t),ẇ');
+fig1.lArrow([220, 115],[270,115],'θ₀(t),ẇ');
+
+fig1.arrow(~30,[30,110],0,1,'qₕ(t)');
+
+</script>
+
+</body>
+</html>

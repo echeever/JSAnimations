@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Circuit Example</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+var R=.0002;
+var L=.002;
+var C=.001;
+
+A=[[   0,   1],
+   [-C/L,-R/L]];
+
+B=[];
+
+C=[[1,0],
+   [0,-1]];
+   
+D=[];
+
+X=[10,0];
+
+sys1=system(A,B,C,D,X);
+sys1.tMax(80);
+sys1.spf(20);
+//sys1.fps(5);
+//sys1.h(.001);
+
+
+fig1=diagram([400,200],sys1);
+
+fig1.resistor( [300, 50],[100, 50],'R₁');
+fig1.inductor( [100,150],[100, 50],'L₁');
+fig1.capacitor([300, 50],[300,150],'C₁');
+fig1.wire(     [100,150],[300,150])
+fig1.ground(   [200,150]);
+
+//unicode ᵢₒ
+
+fig1.arrow(0,[200,35],0,10,'i');
+fig1.meter(1,[350,40],[-5,0,5],'v');
+
+//fig1.update();
+
+myPlot=plot([600,150],sys1,[0,1],[80,10],['Current','Voltage']);
+
+</script>
+
+</body>
+</html>

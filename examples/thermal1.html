@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Another Thermal Model</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+
+
+//theta, dTheta
+
+var Rv=.2;
+var Cv=1;
+
+A=[[-2/(Rv*Cv), 1/(Rv*Cv)],
+   [ 1/(Rv*Cv),-1/(Rv*Cv)]];
+   
+B=[[ 1/(Rv*Cv)],
+   [         0]];
+
+C=[[0,0],
+   [1,0],
+   [0,1]];
+   
+D=[[1],
+   [0],
+   [0]];
+
+X=[0,0];
+
+sys1=system(A,B,C,D,X);
+sys1.tMax(10);
+sys1.h(.0005);
+sys1.spf(120);
+
+//sys1.input(0,function(t){return 20*(t<2)+20*(t%.6<.3)*(4<t)});
+sys1.input(0,function(t){return 20*(t%.4<(.4*( (t/5)*(t<5) + ((10-t)/5)*(5<t) ) ))});
+
+fig1=diagram([400,250],sys1);
+
+plot1=plot([600,150],sys1,[0,1,2],[10,0,20],['θᵢ','θ₁','θ₂']);
+
+
+//walls
+fig1.wall([100, 28],[250, 12],'S');
+fig1.wall([350, 40],[ 12,100],'W');
+fig1.wall([100,140],[250, 12],'N');
+
+//corners
+fig1.wall([349, 27],[13,13]);
+fig1.wall([349,139],[13,13]);
+
+fig1.line ([101.5, 40],[101.5,140]);
+fig1.block([103,40],[ 30,100],'R');
+fig1.text ([175,90],'C');
+fig1.block([225,40],[ 30,100],'R');
+fig1.text ([300,90],'C');
+
+fig1.meter(0,[ 55, 80],[0,20],['θᵢ',1]);
+fig1.meter(1,[175, 180],[0,20],'θ₁');
+fig1.meter(2,[300, 180],[0,20],'θ₂');
+
+//makes the page reload every second: good for laying out the model; bad for most other things…
+//setTimeout(function(){document.location=''},1000);
+
+
+</script>
+
+</body>
+</html>

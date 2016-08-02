@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Rotating and Translating</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+<script>
+	
+	var r=30;
+	
+	sys=system(
+		[[ 0,1],     //A
+		 [-2,-.2]],
+		[],           //B
+		[[1,0],
+		 [360/(2*Math.PI*r),0],
+		 [2,0]],      //C
+		[],           //D
+		[30,0]        //X
+		 );
+	sys.tMax(20);
+	dia=diagram([500,200],sys);
+	plt=plot([500,150],sys,[0],[20,30]);
+	
+	ax=dia.axis([0,100],0);
+
+	dia.wall([42,75],[8,50],'e');
+	dia.wall([450,55],[8,60],'w');
+	dia.wall([100,100+r],[300,8],'n');
+	w1=dia.wheel(0,1,['M, J','n'],ax,250, r,'h');
+	dia.spring('',ax,50,w1);
+	dia.dash('',ax,450,w1);
+	
+	ax2=dia.axis([0,100-r],0);
+	m1=dia.mass(0,'',ax2,250);
+	m2=dia.mass(2,'',ax2,300);
+	dia.rope('',ax2,m1,m2);
+	dia.spring('',ax2,m2,450);
+
+	
+</script>
+
+</body>
+</html>

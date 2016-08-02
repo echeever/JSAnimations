@@ -1,0 +1,889 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Linear Reference</title>
+	<link rel="shortcut icon" href="favicon.png" >
+	<script type="text/javascript" src="raphael.js"></script>
+	<script type="text/javascript" src="linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<link href="prettify.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="prettify.js"></script>
+	<style>
+p,pre,ul{
+	margin-left:50px;	
+}
+h3{
+	margin-left:20px;	
+}
+	</style>
+</head>
+<body onload="prettyPrint()">
+
+<h1>Reference</h1>
+
+<ol>
+	<li><a href='#System'>System</a><ol>
+		<li><a href='#system'>system</a></li>
+		<li><a href='#tMax'>tMax</a></li>
+		<li><a href='#h'>h</a></li>
+		<li><a href='#spf'>spf</a></li>
+		<li><a href='#fps'>fps</a></li>
+		<li><a href='#input'>input</a></li>
+	</ol></li>
+	<li><a href='#Plot'>Plot</a><ol>
+		<li><a href='#plot'>plot</a></li>
+	</ol></li>
+	<li><a href='#Diagram'>Diagram</a><ol>
+		<li><a href='#diagram'>diagram</a></li>
+		<li><a href='#lScale'>lScale</a></li>
+		<li><a href='#rScale'>rScale</a></li>
+		<li><a href='#axis'>axis</a></li>
+		<li><a href='#wall'>wall</a></li>
+		<li><a href='#mass'>mass</a></li>
+		<li><a href='#spring'>spring</a>,
+		    <a href='#dash'>dash</a>,
+		    <a href='#rope'>rope</a></li>
+		<li><a href='#wire'>wire</a>,
+		    <a href='#resistor'>resistor</a>,
+		    <a href='#capacitor'>capacitor</a>,
+		    <a href='#inductor'>inductor</a>,
+		    <a href='#terminal2'>terminal</a>,
+		    <a href='#source'>source</a>,
+		    <a href='#sourceI'>sourceI</a>,
+		    <a href='#sourceV'>sourceV</a>,
+		    </li>
+		<li><a href='#node'>node</a>,
+		    <a href='#ground'>ground</a>,
+		    <a href='#terminal1'>terminal</a></li>
+		<li><a href='#opAmp'>opAmp</a></li>
+		<li><a href='#meter'>meter</a></li>
+		<li><a href='#text'>text</a></li>
+		<li><a href='#line'>line</a></li>
+		<li><a href='#block'>block</a></li>
+		<li><a href='#arrow'>arrow</a></li>
+		<li><a href='#lArrow'>lArrow</a></li>
+		<li><a href='#coil'>coil</a></li>
+		<li><a href='#vessel'>vessel</a></li>
+		<li><a href='#pipe'>pipe</a></li>
+		<li><a href='#mixer'>mixer</a></li>
+		<li><a href='#axisR'>axisR</a></li>
+		<li><a href='#cylinder'>cylinder</a></li>
+		<li><a href='#pad'>pad</a></li>
+		<li><a href='#aArrow'>aArrow</a></li>
+		<li><a href='#wheel'>wheel</a></li>
+		<li><a href='#motor'>motor</a>, 
+		    <a href='#galv'>galv</a></li>
+		<li><a href='#speaker'>speaker</a></li> 
+	</ol></li>
+	<li><a href='#Slider'>Slider</a><ol>
+		<li><a href='#slider'>slider</a></li>
+	</ol></li>
+	<li><a href='#TBox'>TBox</a><ol>
+		<li><a href='#tBox'>tBox</a></li>
+		<li><a href='#set'>set</a></li>
+		<li><a href='#place'>place</a></li>
+	</ol></li>
+</ol>
+
+<h2 id='System'>System</h2>
+<p>A <em>System</em> simulates a system of linear differential equations of the form:</p>
+<p><center>x'=Ax+Bu <br/> y=Cx+Du</center></p>
+<p>where x are the state-space variables, u are the inputs, and y are the outputs.</p>
+<p>Simulation time is independant from real time; One unit of system time does not necissary take one second.
+Simulation units are broken into steps of size h, usually a small fraction.
+The number of steps calculated each animation frame is dictated by spf (steps-per-frame), and the number of frame per second is fps.
+So in order for simulaiton units to equal real seconds, fps*spf*h=1. For example; fps=20, spf=50, h=.001.
+It cannot, however, be assumed that the simulation will run at fps frame per second, as computers and browsers may be unable to calculate and update things fast enough.
+
+<h3 id='system'><code>system(A,B,C,D,X)</code></h3>
+<p>Creates a new System. A control (Stop/Start) button is added to the page. For the most recently created or clicked system, the sapcebar operates this button.</p>
+<ul>
+<li><code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> System parameter matrices</li>
+<li><code>X</code> initial conditions [optional]</li>
+</ul>
+<p>Returns: a System object</p>
+<pre class="prettyprint">
+//A second-order system with one input and two outputs.
+A=[[ 0  ,1],
+   [-1,-.1]];
+   
+B=[[1,0]];
+
+C=[[0,0],
+   [1,0],
+   [0,1]];
+   
+D=[[1],
+   [0],
+   [0]];
+   
+X=[10,0];
+
+sys=system(A,B,C,D,X);
+</pre>
+
+
+<h3 id='tMax'><code>System.tMax(tMax)</code></h3>
+<p>Makes the simulation stop at a given time. If tMax is 0, the simulation never stops.</p>
+<p>When the system stops, the control button becomes a "reset" button.</p>
+<p>Default: 0</p>
+<ul><li><code>tMax</code> maximum time, in simulation units</li></ul>
+<p>Returns: the System</p>
+<pre class="prettyprint">sys.tMax(10);</pre>
+
+<h3 id='h'><code>System.h(h)</code></h3>
+<p>Sets the simulation step-size.</p>
+<p>Default: 0.01</p>
+<ul><li><code>h</code> new step-size</li></ul>
+<p>Returns: the System</p>
+<pre class="prettyprint">sys.h(.005);</pre>
+
+<h3 id='spf'><code>System.spf(spf)</code></h3>
+<p>Sets the numbers of steps calculated each animation frame.</p>
+<p>Default: 15</p>
+<ul><li><code>spf</code> steps per frame</li></ul>
+<p>Returns: the System</p>
+<pre class="prettyprint">sys.spf(10);</pre>
+
+<h3 id='fps'><code>System.fps(fps)</code></h3>
+<p>Sets the animation framerate (frames per second).</p>
+<p>Default: 30</p>
+<ul><li><code>h</code> new framerate</li></ul>
+<p>Returns: the System</p>
+<pre class="prettyprint">sys.fps(20);</pre>
+
+
+<h3 id='setP'><code>System.setP(nA,nB,nC,nD,nXi)</code></h3>
+<p>Sets new system parameters.</p>
+<ul>
+<li><code>nA</code>, <code>nB</code>, <code>nC</code>, <code>nD</code> new system matricies.</li>
+<li><code>nXi</code> new initial conditions (optional).</li>
+</ul>
+
+<h3 id='initial'><code>System.initial(nXi,go)</code></h3>
+<p>Resets a system to initial conditions.</p>
+<ul>
+<li><code>nXi</code> new initial conditions (optional).</li>
+<li><code>go</code> starts the simulation if true.</li>
+</ul>
+
+
+<h3 id='input'><code>System.input(v,func)</code></h3>
+<p>Attaches an input function to the system.</p>
+<p>U[v]=func(t).</p>
+<ul><li><code>v</code> the index of U to apply the function to.</li>
+<li><code>func</code> the function. Can be a function of t. Must return a number.</li></ul>
+<p>Returns: the System</p>
+<pre class="prettyprint">//add a sinusoidal input to U[0]
+  //with amplitude 5 and frequency 2
+sys.input(0,function(t){
+	return 5*Math.sin(2*t);
+});
+</pre>
+
+
+
+<h2 id='Plot'>Plot</h2>
+<h3 id='plot'><code>plot(size,sys,vars,limits,labels,colors)</code></h3>
+<p>Creates a new Plot and adds it to the page.</p>
+<p>Double-click a plot to see the numbers, double-click to return.</p>
+<ul><li><code>size</code> pixel dimensions of the plot in the form [x,y]</li>
+<li><code>sys</code> the System object to plot data from</li>
+<li><code>vars</code> the Y variables to plot. (plots all by default)</li>
+<li><code>limits</code> plot limits in the form [xMin,xMax,yMin,yMax], [xMax,yMin,yMax], or [xMax,yMax]. (defaults to [50,20])</li>
+<li><code>labels</code> the names to use in the legend (no legend by default)</li>
+<li><code>colors</code> the colors to paint the lines. Default colors: blue, red, green, yellow, magenta, cyan</li></ul>
+<p>Returns: a Plot object</p>
+<pre class="prettyprint">
+sys=system([[-1]],[[1]],[[0],[1]],[[1],[0]]);
+sys.input(0,function(t){return t%12<6 });//square wave
+sys.tMax(36);
+sys.spf(40);
+
+plot([500,150],sys,[0,1],[36,0,1],['in','out'],['green','red']);
+</pre>
+<script>
+sys=system([[-1]],[[1]],[[0],[1]],[[1],[0]]);
+sys.input(0,function(t){return t%12<6 });//square wave
+sys.tMax(36);
+sys.spf(40);
+
+plot([500,150],sys,[0,1],[36,0,1],['in','out'],['green','red']);
+</script>
+
+
+<h2 id='Diagram'>Diagram</h2>
+<p>A <em>Diagram</em> draws shapes to illustrate various linear systems. Some of these may be associated with outputs (Y values) of a System, and will animate accordingly.</p>
+
+
+<h3 id='diagram'><code>diagram(size,sys)</code></h3>
+<p>Creates a new blank Diagram and adds it to the page. Provide a System if animation is desired.</p>
+<ul>
+<li><code>size</code> the pixel dimensions of the diagram, in the form [x,y]</li>
+<li><code>sys</code> the associated system object [optional]</li>
+</ul>
+<p>Returns: a Diagram object</p>
+<pre class="prettyprint">dia=diagram([200,100],sys);
+</pre>
+
+<h3 id='label'>Labeling Syntax</h3>
+<p>Diagram elements use a uniform labeling syntax.
+Each element has a default label location, a secondary default, and Noth, South, East, and West positions. 
+An explicit offset from a central point may also be defined, along with a text alignent (defaults to centered).
+Text is centered for Norh and South, aligned right for East, left for West, and default positions vary.
+The following are valid labeling methods: <code>txt</code>, <code>[txt]</code>, <code>[txt,n]</code>,
+<code>[txt,Q]</code>, <code>[txt,[offsX,offsY]]</code>, <code>[txt,[offsX,offsY],aln]</code></p>
+<ul>
+<li><code>txt</code> label text</li>
+<li><code>n</code> 0 for default, not 0 for the secondary default</li>
+<li><code>Q</code> cardinal location: <code>'N'</code>, <code>'S'</code>, <code>'E'</code>, or <code>'W'</code> (case insensitive)</li>
+<li><code>offsX, offsY</code> offset from center</li>
+<li><code>aln</code> text alignment. <code>0</code> for centered, <code>1</code> for right, <code>-1</code> for left</li>
+</ul>
+
+
+<h3 id='lScale'><code>Diagram.lScale(scl)</code></h3>
+<p>Set the diagram's linear scaling factor.</p>
+<ul><li><code>scl</code> new lScale value</li>
+</ul>
+<p>Returns: the Diagram</p>
+<pre class="prettyprint">dia.lScale(50); //translate masses 50 pixels per system unit</pre>
+
+<h3 id='rScale'><code>Diagram.rScale(scl)</code></h3>
+<p>Set the diagram's rotating scaling factor.</p>
+<ul><li><code>scl</code> new rScale value</li>
+</ul>
+<p>Returns: the Diagram</p>
+<pre class="prettyprint">dia.rScale(60); //rotate cylinders 60 degrees per system unit</pre>
+
+
+<h3 id='axis'><code>Diagram.axis(p,dir)</code></h3>
+<p>Creates a linear axis. Translating elements will move along this axis.</p>
+<ul><li><code>p</code> the origin, in the form [x,y]</li>
+<li><code>dir</code> the angle (direction) of the axis, in degrees. Zero points to the right, 90 points down, etc.</li></ul>
+<p>Returns: an Axis object</p>
+<pre class="prettyprint">ax=dia.axis([0,100],0); //horizontal axis starting at the left edge</pre>
+
+
+<h3 id='wall'><code>Diagram.wall(p,s,borders)</code></h3>
+<p>Creates a diagonally-striped rectangle with optional borders on any side.</p>
+<p>Used to indicate walls, floors, ceilings in translating systems and the boundaries of thermal systems. Often 10 pixels wide.</p>
+<ul><li><code>p</code> the upper-right corner, in the form [x,y]</li>
+<li><code>s</code> the size, in the form [width,height].</li>
+<li><code>borders</code> a string specifying which borders to draw. Use the letters N, E, S, and W (case insensitive)</li></ul>
+<p>Returns: a HashBox object</p>
+<pre class="prettyprint">
+dia.wall([ 15,25],[ 10,50],'e'); //Left wall
+dia.wall([ 15,75],[ 10,10]);     //Left corner piece
+dia.wall([ 25,75],[150,10],'n'); //Floor
+dia.wall([175,75],[ 10,10]);     //Right corner piece
+dia.wall([175,25],[ 10,50],'w'); //Right wall
+
+dia.wall([ 50,20],[100,30],'nsew'); //Block</pre>
+<script>
+dia=diagram([200,100]);
+
+dia.wall([ 15,25],[ 10,50],'e'); //Left wall
+dia.wall([ 15,75],[ 10,10]);     //Left corner piece
+dia.wall([ 25,75],[150,10],'n'); //Floor
+dia.wall([175,75],[ 10,10]);     //Right corner piece
+dia.wall([175,25],[ 10,50],'w'); //Right wall
+
+dia.wall([ 50,20],[100,30],'nsew'); //Block
+</script>
+
+
+<h3 id='mass'><code>Diagram.mass(v,label,axis,rest,wheel,w,h,flabel)</code></h3>
+<p>Creates translating Mass.</p>
+<ul><li><code>v</code> System output Y[v] to move by. Use <code>-1</code> for a stationary mass.</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>axis</code> Axis along which to move.</li>
+<li><code>rest</code> resting location of the mass center, along the axis.</li>
+<li><code>wheel</code> wheel radius. Negative for surface friction 'xxxxx'. Zero for none.</li>
+<li><code>w</code> dimension along the axis (width if horizontal).</li>
+<li><code>h</code> dimension perpendicular to the axis (height if horizontal).</li>
+<li><code>flabel</code> friction <a href='#label'>label</a></li></ul>
+<p>Returns: a Mass object</p>
+<pre class="prettyprint">m1=dia.mass(-1,'M',ax,100,-8,70,40,'B',1);</pre>
+<script>
+dia=diagram([200,100]);
+ax=dia.axis([0,50],0);
+m1=dia.mass(-1,'M',ax,100,-8,70,40,'B',1);
+</script>
+
+<h3 id='spring'><code>Diagram.spring(label,axis,mA,mB,off)</code></h3>
+<h3 id='dash'><code>Diagram.dash(label,axis,mA,mB,off)</code></h3>
+<h3 id='rope'><code>Diagram.rope(label,axis,mA,mB,off)</code></h3>
+<p>Creates a spring, dashpot, or line segment (rope) between two masses or fixed points.</p>
+<ul>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>axis</code> Axis along which to move.</li>
+<li><code>mA, mB</code> Connected mass on each end, or location along axis.</li>
+<li><code>off</code> Offset from axis, for parallel elements. [Optional]</li></ul>
+<p>Returns: a Linkage object</p>
+<pre class="prettyprint">
+dia.spring('K',ax,25,175,-20);
+dia.dash(  'B',ax,25,175, 20);
+dia.rope(   '',ax,25,175,  0);
+</pre>
+<script>
+dia=diagram([200,100]);
+ax=dia.axis([0,50],0);
+dia.spring('K'  ,ax,25,175,-20);
+dia.dash(['B',1],ax,25,175, 20);
+dia.rope(   ''  ,ax,25,175,  0);
+</script>
+
+<h3 id='wire'><code>Diagram.wire(p1,p2,label)</code></h3>
+<h3 id='resistor'><code>Diagram.resistor(p1,p2,label)</code></h3>
+<h3 id='capacitor'><code>Diagram.capacitor(p1,p2,label)</code></h3>
+<h3 id='inductor'><code>Diagram.inductor(p1,p2,label)</code></h3>
+<h3 id='terminal2'><code>Diagram.terminal(p1,p2,label)</code></h3>
+<h3 id='source'><code>Diagram.source(p1,p2,label)</code></h3>
+<h3 id='sourceI'><code>Diagram.sourceI(p1,p2,label)</code></h3>
+<h3 id='sourceV'><code>Diagram.sourceV(p1,p2,label)</code></h3>
+<p>Create a circuit element between two points.</p>
+<ul><li><code>p1</code>, <code>p2</code> Endpoints of element, in the form [x,y].</li>
+<li><code>label</code> <a href='#label'>label</a></li></ul>
+<p>Returns: an Element2 object</p>
+<pre class="prettyprint">
+dia.wire(     [ 50, 50],[150, 50],'wire');
+dia.resistor( [ 50,100],[150,100],'resistor');
+dia.capacitor([ 50,150],[150,150],'capacitor');
+dia.inductor( [ 50,200],[150,200],'inductor');
+dia.terminal( [200, 50],[300, 50],'terminal');
+dia.source(   [200,100],[300,100],'source');
+dia.sourceI(  [200,150],[300,150],'sourceI');
+dia.sourceV(  [200,200],[300,200],'sourceV');
+</pre>
+<script>
+dia=diagram([350,230]);
+dia.wire(     [ 50, 50],[150, 50],'wire');
+dia.resistor( [ 50,100],[150,100],'resistor'); 
+dia.capacitor([ 50,150],[150,150],'capacitor');
+dia.inductor( [ 50,200],[150,200],'inductor');
+dia.terminal( [200, 50],[300, 50],'terminal');
+dia.source(   [200,100],[300,100],'source');
+dia.sourceI(  [200,150],[300,150],'sourceI');
+dia.sourceV(  [200,200],[300,200],'sourceV');
+</script>
+
+
+<h3 id='node'><code>Diagram.node(p,label)</code></h3>
+<h3 id='ground'><code>Diagram.ground(p,label)</code></h3>
+<h3 id='terminal1'><code>Diagram.terminal(p,label)</code></h3>
+<p>Create a circuit element at one point.</p>
+<ul>
+<li><code>p</code> the point, in the form [x,y]</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+</ul>
+<p>Returns: an Element1 object</p>
+<pre class="prettyprint">
+dia.terminal([20,25]);
+dia.node(    [50,25]);
+dia.ground(  [80,12]);
+</pre>
+<script>
+dia=diagram([100,50]);
+dia.terminal([20,25]);
+dia.node(    [50,25]);
+dia.ground(  [80,12]);
+</script>
+
+
+<h3 id='opAmp'><code>Diagram.opAmp(p1,p2,label,spacing)</code></h3>
+<p>Creates an Op-Amp. The size is scaled relative to the <code>spacing</code> argument.</p>
+<ul>
+<li><code>p1</code> the point between the input terminals, in the form [x,y]</li>
+<li><code>p2</code> the point at the output terminal, in the form [x,y]</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>spacing</code> space between input terminals. Negative values reverse polarity. Default=30; <code>-1</code> becomes -30.</li>
+</ul>
+<p>Returns: an OpAmp object</p>
+<pre class="prettyprint">
+dia.opAmp([10,40],[130,40],'a',-1);
+</pre>
+<script>
+dia=diagram([140,80]);
+dia.opAmp([10,40],[130,40],'a',-1);
+</script>
+
+
+<h3 id='meter'><code>Diagram.meter(v,loc,range,label)</code></h3>
+<p>A general-purpose meter.</p>
+<ul>
+<li><code>v</code> the system Y[v] value to indicate.</li>
+<li><code>loc</code> locaiton of center, in the form [x,y].</li>
+<li><code>range</code> either min/max value, or array of checks, in the form [min,n,…,n,max]</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+</ul>
+<p>Returns: a Meter object</p>
+<pre class="prettyprint">
+sys=system([[0,1],[-1,-.0015]],[],[[1,0],[0,1]],[],[10,0]);
+dia=diagram([120,60],sys);
+dia.meter(0,[30,32],[-10,0,10]);
+dia.meter(1,[90,32],[-10,0,10]);
+</pre>
+<script>
+sys=system([[0,1],[-1,-.002]],[],[[1,0],[0,1]],[],[10,0]);
+dia=diagram([120,60],sys);
+dia.meter(0,[30,32],[-10,0,10]);
+dia.meter(1,[90,32],[-10,0,10]);
+</script>
+
+
+<h3 id='text'><code>Diagram.text(p,label)</code></h3>
+<p>Text. Useful for labeling thermal capacitance, and so much more!</p>
+<ul>
+<li><code>p</code> center point of the text.</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+</ul>
+<p>Returns: a Text object</p>
+<pre class="prettyprint">
+dia.text([50,15],'Hello World!');
+</pre>
+<script>
+dia=diagram([100,30]);
+dia.text([50,15],'Hello World!');
+</script>
+
+
+<h3 id='line'><code>Diagram.line(p1,p2,w)</code></h3>
+<p>A general purpose line. Useful for indicating a plate with fixed temperature.</p>
+<ul>
+<li><code>p1</code>, <code>p2</code> endpoints, in the form [x,y].</li>
+<li><code>w</code> line width. [Optional: defaults to 4]</li>
+</ul>
+<p>Returns: a Line object</p>
+<pre class="prettyprint">
+dia.line([10,10],[90,10],2);
+dia.line([10,20],[90,20]);
+</pre>
+<script>
+dia=diagram([100,30]);
+dia.line([10,10],[90,10],2);
+dia.line([10,20],[90,20]);
+</script>
+
+<h3 id='block'><code>Diagram.block(p,s,label)</code></h3>
+<p>A grey rectangle, for illustrating a thermal resistance.</p>
+<ul>
+<li><code>p</code> upper-left point, in the form [x,y].</li>
+<li><code>s</code> dimensions (size), in the form [x,y].</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+</ul>
+<p>Returns: a Block object</p>
+<pre class="prettyprint">
+dia.block([20,10],[60,80],'R');
+</pre>
+<script>
+dia=diagram([100,100]);
+dia.block([20,10],[60,80],'R');
+</script>
+
+
+<h3 id='arrow'><code>Diagram.arrow(v,loc,angle,scale,label)</code></h3>
+<h3>           <code>Diagram.arrow(v,A,rest,off,scale,label)</code></h3>
+<p>A thick arrow, for indicating applied force, heat flow, current, etc. Becomes a diamond when length is near 0.</p>
+<p>Can be called in two ways. The second is for translating systems and uses an Axis.</p>
+<ul>
+<li><code>v</code> associated Y[v] index. If negative, the constant number -1-v (~v) is used.</li>
+<li><code>loc</code> tail location, in the form [x,y].</li>
+<li><code>angle</code> angle in which to point.</li>
+<li><code>A</code> the axis along which to move.</li>
+<li><code>rest</code> the point along the axis to call home.</li>
+<li><code>scale</code> value scaling factor. [Optional: defaults to 2]</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+</ul>
+<p>Returns: an Arrow object</p>
+<pre class="prettyprint">
+dia.arrow(0,[60,25],0,4,'q');
+</pre>
+<script>
+sys=system([[0,1],[-1,-.5]],[],[[1,0]],[],[10,0]);
+sys.tMax(20);
+dia=diagram([120,35],sys);
+dia.arrow(0,[60,25],0,4,'q');
+</script>
+
+
+<h3 id='lArrow'><code>Diagram.lArrow(p1,p2,label)</code></h3>
+<p>A thinner arrow, for indicating direction, constant flow, etc.</p>
+<p>Drawn between p1 and p2, with the head at p2.</p>
+<ul>
+<li><code>p1</code> first point, in the form [x,y].</li>
+<li><code>p2</code> second point, in the form [x,y].</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>dashed</code> makes the arrow dashed</li>
+</ul>
+<p>Returns: a LinArrow object</p>
+<pre class="prettyprint">
+dia.lArrow([20,25],[100,25],'f');
+
+dia.wall([20,40],[10,30],'e');
+dia.lArrow([30,55],[90,55],'y',1);</pre>
+<script>
+dia=diagram([120,95]);
+dia.lArrow([20,30],[100,30],'f');
+
+dia.wall([20,50],[10,30],'e');
+dia.lArrow([30,65],[90,65],'y',1);
+</script>
+
+
+<h3 id='coil'><code>Diagram.coil(p1,p2,w)</code></h3>
+<p>A coil, for illustrating a heat source.</p>
+<ul>
+<li><code>p1</code> point between terminals, in the form [x,y].</li>
+<li><code>p2</code> center of coil, in the form [x,y].</li>
+<li><code>w</code> distance between wires. [Optional: defaults to 35]</li>
+</ul>
+<p>Returns: a Coil object</p>
+<pre class="prettyprint">
+dia.coil([10,30],[80,30]);
+</pre>
+<script>
+dia=diagram([100,60]);
+dia.coil([10,30],[80,30]);
+</script>
+
+
+<h3 id='vessel'><code>Diagram.vessel(p,s,open,label)</code></h3>
+<p>A vessel for holding water in mass-flow systems.</p>
+<p>Can be open at the top, or closed</p>
+<ul>
+<li><code>p</code> top-left corner, in the form [x,y].</li>
+<li><code>s</code> dimensions, in the form [w,h].</li>
+<li><code>open</code> open? Default: not open.</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+</ul>
+<p>Returns: a Vessel object</p>
+<pre class="prettyprint">
+dia.vessel([170,100],[80, 50],1,'open\nvessel');
+dia.vessel([ 50, 50],[80,100]);
+</pre>
+<script>
+dia=diagram([300,200]);
+dia.vessel([170,100],[80, 50],1,'open\nvessel');
+dia.vessel([ 50, 50],[80,100]);
+</script>
+
+
+<h3 id='pipe'><code>Diagram.pipe(p1,p2,w,label)</code></h3>
+<p>A pipe for connecting vessels in mass-flow systems.</p>
+<ul>
+<li><code>p1</code> start, in the form [x,y].</li>
+<li><code>p2</code> end, in the form [x,y].</li>
+<li><code>w</code> width. Default: 8</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+</ul>
+<p>Returns: a Pipe object</p>
+<pre class="prettyprint">
+dia.vessel([ 50,100],[80, 50],1);
+dia.vessel([170, 50],[80,100]);
+</pre>
+<script>
+dia=diagram([150,50]);
+dia.pipe([25,25],[125, 25]);
+</script>
+
+
+<h3 id='mixer'><code>Diagram.mixer(p1,p2,w)</code></h3>
+<p>An animated mixing propeller, for keeping those vessels of water well-mixed.</p>
+<ul>
+<li><code>p1</code> center of propeller, in the form [x,y].</li>
+<li><code>p2</code> end of shaft, in the form [x,y].</li>
+<li><code>w</code> width of propeller. Default: 16</li>
+</ul>
+<p>Returns: a Mixer object</p>
+<pre class="prettyprint">
+dia.mixer([20,30],[80,30]);
+</pre>
+<script>
+sys=system();
+dia=diagram([100,60],sys);
+dia.mixer([20,30],[80,30]);
+</script>
+
+
+<h3 id='axisR'><code>Diagram.axisR(origin,proj)</code></h3>
+<p>Rotation Axis, for rotating systems. All rotating things rotate around an Axis.</p>
+<ul>
+<li><code>origin</code> the "origin" point of the axis, in the form [x,y].</li>
+<li><code>proj</code> the projection factor. 0 is side-view, >5 looks funny. .25 is default.</li>
+</ul>
+<p>Returns: an AxisR object</p>
+<pre class="prettyprint">
+ax1=fig1.axisR([0,150],.3);
+</pre>
+<script>
+//ax1=fig1.axisR([0,150],.3);
+</script>
+
+
+<h3 id='cylinder'><code>Diagram.cylinder(v1,v2,label,A,loc,w,r,f,flabel)</code></h3>
+<p>The cylinder is used to depict wheels, shafts, and torsional springs (twistable shafts).</p>
+<ul>
+<li><code>v1,v2</code> the Y values to which the cylinder is associated. If they differ, the shaft is flexible. If they are negative, the constant number -1-v (~v) is used.</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>A</code> the rotational axis.</li>
+<li><code>loc</code> location of left edge along axis.</li>
+<li><code>w</code> width of cylinder.</li>
+<li><code>r</code> radius.</li>
+<li><code>f</code> adds friction hashes to the bottom of height f.</li>
+<li><code>flabel</code> friction <a href='#label'>label</a></li>
+</ul>
+<p>Returns: a Cylinder object</p>
+<pre class="prettyprint">
+dia=diagram([300,150]);
+ax=dia.axisR([0,85]);
+
+dia.cylinder(~0,~0,['J','n'],ax,50,20,40,7,'B');
+dia.cylinder(~0,~720,['K','n'],ax,70,200,8);
+</pre>
+<script>
+dia=diagram([300,150]);
+ax=dia.axisR([0,85]);
+
+dia.cylinder(~0,~0,['J','n'],ax,50,20,40,7,'B');
+dia.cylinder(~0,~720,['K','n'],ax,70,200,8);
+</script>
+
+
+<h3 id='pad'><code>Diagram.pad(label,A,loc,w,r)</code></h3>
+<p>A semi-transparent dark band (just the front). Place between two Cylinders to indicate friction.</p>
+<ul>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>A</code> the rotational axis.</li>
+<li><code>loc</code> location of left edge along axis.</li>
+<li><code>w</code> width of cylinder.</li>
+<li><code>r</code> radius.</li>
+</ul>
+<p>Returns: a Pad object</p>
+<pre class="prettyprint">
+dia=diagram([126,150]);
+ax=dia.axisR([0,85]);
+
+dia.cylinder(~0,~0,'',ax,50,8,40);
+dia.pad('B',ax,58,10,40);
+dia.cylinder(~0,~0,'',ax,68,8,40);
+</pre>
+<script>
+dia=diagram([126,150]);
+ax=dia.axisR([0,85]);
+
+dia.cylinder(~0,~0,'',ax,50,8,40);
+dia.pad('B',ax,58,10,40);
+dia.cylinder(~0,~0,'',ax,68,8,40);
+</script>
+
+
+<h3 id='aArrow'><code>Diagram.aArrow(label,A,loc,r,va,vl,lScale,w)</code></h3>
+<h3 id='aArrow'><code>Diagram.aArrow(label,c,r,va,vl,lScale,w)</code></h3>
+<p>An arrow drawn in an arc around a rotaitonal axis. Use for indicating direciton, torque, etc.</p>
+<ul>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>A</code> the rotational axis.</li>
+<li><code>loc</code> location along axis.</li>
+<li><code>c</code> center point: [x,y].</li>
+<li><code>r</code> radius. If not using axis, can also be [rx,ry].</li>
+<li><code>va</code> angle of tail. Y index or use ~val for static number</li>
+<li><code>vl</code> angular length.</li>
+<li><code>lScale</code> length scale factor. Defaults to 1.</li>
+<li><code>w</code> Tail width. Defaults to 1. Negative for dashed.</li>
+</ul>
+<p>Returns: an ArcArrow object</p>
+<pre class="prettyprint">
+dia=diagram([275,150]);
+ax=dia.axisR([0,80],.35);
+
+dia.wall([35,65],[30,30]);
+dia.cylinder(~0,~200,'K',ax,50,150,6);
+dia.cylinder(~200,~200,['','J'],ax,200,10,25);
+
+dia.aArrow('',ax,205,50, ~45,~1,-90,-1);
+dia.aArrow('',ax,205,50,~225,~1,-90,-1);
+</pre>
+<script>
+dia=diagram([275,150]);
+ax=dia.axisR([0,80],.35);
+
+dia.wall([35,65],[30,30]);
+dia.cylinder(~0,~200,'K',ax,50,150,6);
+dia.cylinder(~200,~200,['','J'],ax,200,10,25);
+
+
+dia.aArrow('',ax,205,50, ~45,~1,-90,-1);
+dia.aArrow('',ax,205,50,~225,~1,-90,-1);
+
+dia.aArrow(['i',[0,0]],[110,35],[20,15],~315,~250);
+dia.aArrow('τ',[110,130],15,~0,~120,0,2);
+</script>
+
+
+<h3 id='wheel'><code>Diagram.wheel(vt,vr,label,A,rest,r,bracket)</code></h3>
+<p>A wheel that translates along a translational axis and rotates. Also makes an excellent pulley.</p>
+<ul>
+<li><code>vt</code> variable for translating (or <code>-1</code> for stationary).</li>
+<li><code>vr</code> variable for rotating (degrees).</li>
+<li><code>label</code> <a href='#label'>label</a></li>
+<li><code>A</code> a translational axis.</li>
+<li><code>rest</code> resting location along axis.</li>
+<li><code>r</code> wheel radius.</li>
+<li><code>bracket</code> indicates a bracket: <code>'n'</code>, <code>'e'</code>, <code>'s'</code>, <code>'w'</code>, <code>'h'</code>, or <code>'v'</code> (case insensitive)</li>
+</ul>
+<p>Returns: a Wheel object</p>
+<pre class="prettyprint">
+dia=diagram([500,150]);
+ax=dia.axis([0,85],0);
+
+w1=dia.wheel(-1,-1,'w₁',ax, 75,30,'e');
+w2=dia.wheel(-1,-1,'w₂',ax,250,40,'h');
+w3=dia.wheel(-1,-1,'w₃',ax,425,30,'w');
+dia.spring('',ax,w1,w2);
+dia.spring('',ax,w2,w3);
+</pre>
+<script>
+dia=diagram([500,150]);
+ax=dia.axis([0,85],0);
+
+w1=dia.wheel(-1,-1,'w₁',ax, 75,30,'e');
+w2=dia.wheel(-1,-1,'w₂',ax,250,40,'h');
+w3=dia.wheel(-1,-1,'w₃',ax,425,30,'w');
+dia.spring('',ax,w1,w2);
+dia.spring('',ax,w2,w3);
+</script>
+
+
+<h3 id='motor'><code>Diagram.motor(vr,vi,p,s,dir)</code></h3>
+<h3 id='galv'><code>Diagram.galv(vr,vi,p,s,dir)</code></h3>
+<p>A motor or galvanometer.</p>
+<ul>
+<li><code>vr</code> variable for rotation (degrees).</li>
+<li><code>vi</code> variable for current direction.</li>
+<li><code>p</code> center point; [x,y]</li>
+<li><code>s</code> size; [w,h]</li>
+<li><code>dir</code> magnetic field direction; 0: S->N, 1:N<-S</li>
+</ul>
+<p>Returns: a Motor object</p>
+<pre class="prettyprint">
+sys=system([[0,1],[-1,0]],[],[[1,0],[0,1]],[],[1,0]).h(.005);
+dia=diagram([550,200],sys).rScale(40);
+
+dia.galv (0,1,[150,100],[200,70]);
+dia.terminal([150,170],[150,30]);
+
+dia.motor(0,1,[400,100],[200,70]);
+dia.terminal([400,170],[400,30]);
+</pre>
+<script>
+sys=system([[0,1],[-1,0]],[],[[1,0],[0,1]],[],[1,0]).h(.005);
+dia=diagram([550,200],sys).rScale(40);
+
+dia.galv (0,1,[150,100],[200,70]);
+dia.terminal([150,170],[150,30]);
+
+dia.motor(0,1,[400,100],[200,70]);
+dia.terminal([400,170],[400,30]);
+</script>
+
+
+<h3 id='speaker'><code>Diagram.speaker(vm,vb,vi,p,s,angle)</code></h3>
+<p>A speaker, accelerometer or similar electromagnetic linear actuator.</p>
+<ul>
+<li><code>vm</code> variable for magnet.</li>
+<li><code>vb</code> variable for base.</li>
+<li><code>vi</code> variable for current direction.</li>
+<li><code>p</code> center point; [x,y]</li>
+<li><code>s</code> size; [w,h]</li>
+<li><code>angle</code> 0 puts the magnet on top, 90 makes it to the right, etc.<-S</li>
+<li><code>dir</code> magnetic field direction; 0: NSN, 1:SNS</li>
+</ul>
+<p>Returns: a Motor object</p>
+<pre class="prettyprint">
+sys=system([[0,1],[-1,0]],[],[[1,0],[0,1]],[],[1,0]);
+dia=diagram([300,300],sys).rScale(40);
+
+dia.speaker(0,1,1,[200,150],[200,220],0,1);
+dia.terminal([350,125],[350,175]);
+
+</pre>
+<script>
+sys=system([[0,1],[-1,0]],[],[[1,0],[0,1]],[],[1,0]);
+dia=diagram([300,300],sys).lScale(20);
+
+dia.speaker(0,1,1,[150,120],[150,150],0,0);
+dia.terminal([150+150/2+50,120-25],[150+150/2+50,120+25]);
+
+</script>
+
+
+
+<h2 id='Slider'>Slider</h2>
+<p>A <em>Slider</em> provides a device by which the user may specify a number.</p>
+<p>Technically, a slider is a very long [or high] div placed within a smaller div. The div itself has a height [width] of 1, but the will become visible.
+The position of the scrollbar is used to obtain a value. Beside the slider are a static label and a number box for manual entry.</p>
+<p>Each slider corresponds to an index of an array (both passed at creation). An optional callback function will fire when the value is changed.</p>
+
+<h3 id='slider'><code>slider(vars,v,chf,title,limits)</code></h3>
+<p>Creates a new Slider. The necissary elements will be added to the page.</p>
+<ul>
+<li><code>vars</code> The array containing the value of interest.</li>
+<li><code>v</code> the index of the value</li>
+<li><code>chf</code> a function called on change</li>
+<li><code>title</code> title text that appears to the left</li>
+<li><code>limits</code> value limits, in the form [min,max]</li>
+</ul>
+<p>Returns: a Slider object</p>
+<pre class="prettyprint">
+theVars=[1,2];
+mySlider=slider(theVars,0,0,'A: ',[0,3]);
+mySlider=slider(theVars,1,0,'B: ',[0,3]);
+</pre>
+<script>
+theVars=[1,2];
+mySlider=slider(theVars,0,0,'A: ',[0,3]);
+mySlider=slider(theVars,1,0,'B: ',[0,3]);
+</script>
+
+<h2 id='TBox'>TBox</h2>
+<p>A <em>TBox</em> is a dynamic text box consisting of a span within a div.</p>
+
+<h3 id='tBox'><code>tBox(text)</code></h3>
+<p>Creates a new tBox and adds it to the page.</p>
+<ul>
+<li><code>text</code> The text in the box.</li>
+</ul>
+<p>Returns: a Slider object</p>
+<pre class="prettyprint">
+myBox1=tBox("Here is some text");
+myBox2=tBox("Here is more text");
+</pre>
+<script>
+myBox1=tBox("Here is some text");
+myBox2=tBox("Here is more text");
+</script>
+
+<h3 id='place'><code>TBox.place()</code></h3>
+<p>Places the tBox at the current location on the page. Useful if the tBox needs to be created before being added.</p>
+<p>Returns: the TBox</p>
+<pre class="prettyprint">
+myBox2.place();
+</pre>
+<script>
+myBox2.place();
+</script>
+
+<h3 id='set'><code>TBox.set()</code></h3>
+<p>Replaces the text of a TBox.</p>
+<p>Returns: the TBox</p>
+<pre class="prettyprint">
+myBox2.set("Dynamic!");
+</pre>
+<script>
+myBox2.set("Dynamic!");
+</script>
+
+</body>
+</html>

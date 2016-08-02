@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Getting Started</title>
+	<link rel="shortcut icon" href="favicon.png" >
+	<script type="text/javascript" src="raphael.js"></script>
+	<script type="text/javascript" src="linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<link href="prettify.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="prettify.js"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<h1>Getting Started</h1>
+<p>To use these tools, add <a href='linear.js'>the script</a> to the head of the html document.</p>
+<p>These tools use the JavaScript Library <a href='http://raphaeljs.com/'>Raphaël</a>, so you'll need a copy of that as well.</p>
+<pre class="prettyprint">
+&lt;script type="text/javascript" src="raphael.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="linear.js"&gt;&lt;/script&gt;
+</pre>
+<p>The commands are javascript functions that may be called from "inline scripts".</p>
+<p>For example, inserting:</p>
+<pre class="prettyprint">
+&lt;script&gt;
+dia=diagram([100,30]);
+dia.inductor([15,15],[85,15]);
+dia.terminal([15,15],[85,15]);
+&lt;/script&gt;
+</pre>
+<p>into the document would yield:</p>
+<script>
+dia=diagram([100,30]);
+dia.inductor([15,15],[85,15]);
+dia.terminal([15,15],[85,15]);
+</script>
+
+<p>Continue to the <a href='ref.html'>Reference</a> to learn how to make more interesting things, or go back to the <a href='./'>index</a> to see examples.</p>
+<br/>
+<h3>Styling the figures</h3>
+<p> The diagrams and plots may be styled using the CSS selectors <code>.diagram</code> and <code>.plot</code>, respectively.
+<br/>For example, adding colored backgrounds and rounded corners might look like this:</p>
+
+<pre class="prettyprint">
+.diagram{
+	background-color:#FAFAFA;
+	border:solid 2px #DDD;
+}
+.plot{
+	background-color:#FAFAFF;
+	border:solid 2px #DDF;
+}
+.diagram, .plot{
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+}
+</pre>
+
+</body>
+</html>

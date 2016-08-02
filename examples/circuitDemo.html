@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Circuit Demo</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+fig1=diagram([600,200]);
+
+fig1.wire     ([100, 50],[500, 50],'V+')
+fig1.wire     ([100,150],[500,150])
+
+fig1.sourceV  ([100,150],[100, 50],'e' );
+fig1.sourceI  ([175,150],[175, 50],'i' );
+fig1.resistor ([250,150],[250, 50],['R',1]);
+fig1.capacitor([325,150],[325, 50],['C',1]);
+fig1.inductor ([400,150],[400, 50],['L',1]);
+fig1.terminal ([500,150],[500, 50],'eₒ');
+
+fig1.ground([250,150],['ground',[0,30]]);
+
+fig1.node    ([175, 50]);
+fig1.node    ([175,150]);
+fig1.node    ([250, 50]);
+fig1.node    ([250,150]);
+fig1.node    ([325, 50]);
+fig1.node    ([325,150]);
+fig1.terminal([400, 50],'n');
+fig1.node    ([400,150],['m',1]);
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Speaker</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+sys=system([[0,1],[-1,0]],[],[[1,0],[0,1]],[],[10,0]).h(.005).spf(50);
+dia=diagram([300,300],sys);
+
+dia.speaker(0,1,1,[150,110],[170,150],0);
+dia.terminal([150+170/2+50,110-25],[150+170/2+50,110+25],'vᵢ');
+
+</script>
+
+</body>
+</html>

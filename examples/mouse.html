@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Damped Oscillator</title>
+<script src="../raphael.js"></script>
+<script src="../linear.js"></script>
+<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<h2>Damped Oscillator</h2>
+<h3>with mouse input</h3>
+<p>m=2, b=.1, k=1</p>
+<p>Input force is proportional to the vertical position of the mouse.</p>
+
+<br>
+<script>
+
+var mouseX=0, mouseY=0;
+
+document.onmousemove=function(e){
+	mouseX=e.clientX;
+	mouseY=e.clientY;
+}
+
+
+//////    SYSTEM     ///////
+
+m=.5, b=.5, k=.5;
+
+
+A=[[   0,   1],
+   [-k/m,-b/m]];
+
+B=[[  0],
+   [1/m]];
+       
+C=[[0,0],
+   [1,0]];
+       
+D=[[1],
+   [0]];
+       
+
+sys1=system(A,B,C,D).tMax(90);
+
+sys1.input(0,function(t){
+	//scale the mouse position relative to window size
+	return -((mouseY-window.innerHeight/2)/window.innerHeight)*30;
+});
+
+
+//////    DIAGRAM    ///////
+
+
+fig1=diagram([400,200],sys1,1);
+
+fig1.wall([40, 60],[ 10,82],'E');
+fig1.wall([50,142],[300,10],'N');
+fig1.wall([40,141],[11,11]);
+
+ax=fig1.axis([50,101],0);
+
+m1=fig1.mass(1,'m',ax,200,-10,100,60,'b');
+
+fig1.spring('k',ax,0,m1);
+
+fig1.arrow(0,ax,200,-50,5,'u');
+
+
+//////     PLOT      ///////
+
+myPlot=plot([600,250],sys1,[0,1],[90,-30,36],['u','y']);
+
+</script>
+
+</body>
+</html>

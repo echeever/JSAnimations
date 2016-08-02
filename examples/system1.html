@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Linear</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+	<h2>Heading</h2>
+	<p>Some text lies here. We have writing, and more writing and stuff, and then even more perhaps. A formula or two could go here too I suppose, or two formula even, idk…</p>
+	
+	<p>And then we have a diagram!</p>
+	
+	<script>
+	
+	var m1v=3;
+	var m2v=2;
+	var k1v=2;
+	var k2v=.5;
+	var b1v=.08;
+	var b2v=0;
+	var b3v=.4;
+	
+	// dX=A*X+B*U
+	//  Y=C*X+D*U
+
+	A=[[-(b1v+b3v)/m1v,       b3v/m1v,-(k1v+k2v)/m1v, k2v/m1v],
+	   [       b3v/m2v,-(b2v+b3v)/m2v,       k2v/m2v,-k2v/m2v],
+	   [             1,             0,             0,       0],
+	   [             0,             1,             0,       0]];
+
+	B=[[0],
+	   [0],
+	   [0],
+	   [1]];
+	   
+	C=[[0,0,1,0],
+	   [0,0,0,1],
+	   [0,0,0,0]];
+	   
+	D=[[0],
+	   [0],
+	   [1]];
+	   		
+	//dm1,dm2,m1,m2
+	
+	sys=system(A,B,C,D);
+	sys.tMax(75);
+	
+	dia=diagram([600,200],sys).lScale(30);
+	
+	//walls
+	lwall =dia.wall([40, 44],[ 12,100],'E');
+	floor =dia.wall([52,144],[475, 12],'N');
+	corner=dia.wall([40,143],[ 13, 13]);
+	
+	//just one for now...
+	a1=dia.axis([52,100],0);
+	
+	//make elements
+	m1=dia.mass(0  ,'M' ,a1,200,-12,100,60,'b₁');
+	m2=dia.mass(1  ,'m' ,a1,400, 18, 60,50);//,'b₂',1);
+	k1=dia.spring('k₁',a1,m1,0);
+	k2=dia.spring(['k₂',1],a1,m1,m2, 10);
+	b1=  dia.dash('b₃',a1,m1,m2,-10);
+
+	tscl=.5;
+	
+	spikeIn=sys.input(0,function(t){
+		t*=tscl;
+		return 1*(t-0)*(t>0)
+	          -2*(t-1)*(t>1)
+	          +2*(t-3)*(t>3)
+	          -1*(t-4)*(t>4)});
+	          
+//	sqIn   =sys.input(0,function(t){return (t%10>5)?5:-5});
+//	sinIn  =sys.input(0,function(t){return Math.sin(t)});
+	
+	inArrow=dia.arrow(2,a1,400,-50,30);
+	
+	//draw everything
+	dia.update();
+	
+	plt=plot([600,300],sys,[2,0,1],[75,2],['input','M','m']);
+	
+	</script>	
+</body>
+</html>

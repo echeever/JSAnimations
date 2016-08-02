@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Seven Masses</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+	<h2>RC Analogues</h2>
+	<p>Linear systems can behave in many of the same ways.</p>
+			
+	<script>
+	var R=.25;
+	var C=1;
+	sys=system([[-1/(R*C)]],[[1/(R*C)]],[[0],[1]],[[1],[0]]);
+	sys.input(0,function(t){return 25*Math.sin(t*2*Math.PI)});
+	sys.h(.001);
+	fig1=diagram([350,100],sys);
+	fig1.wall([200,76],[100,8],'n');
+	ax=fig1.axis([0,50],0);
+	m0=fig1.mass(0,'yᵢ',ax,75,0,2,2);
+	m1=fig1.mass(1,'M',ax,250,10,50,30);
+	fig1.dash('B',ax,m0,m1);
+	
+	fig2=diagram([350,100],sys);
+	fig2.resistor([100,30],[200,30],'R');
+	fig2.capacitor([200,30],[200,90],'C');
+	fig2.wire([200,30],[260,30]);
+	fig2.wire([100,90],[260,90]);
+	fig2.sourceV([100,90],[100,30],'eᵢ');
+//	fig2.terminal([100,90],[100,30],'eᵢ');
+	fig2.terminal([260,30],[260,90],'eₒ');
+	fig2.meter(0,[40,50],[-25,0,25]);
+	fig2.meter(1,[310,50],[-25,0,25]);
+	
+	fig3=diagram([350,100],sys);
+	
+	fig3.wall([100,10],[150,10],'s');
+	fig3.wall([100,80],[150,10],'n');
+	fig3.wall([250,20],[10,60],'w');
+	fig3.wall([250,10],[10,10]);
+	fig3.wall([250,80],[10,10]);
+	fig3.block([130,20],[50,60],'R');
+	fig3.text([100,50],'θᵢ');
+	fig3.text([215,50],'C, θₒ');
+	
+	fig3.meter(0,[40,50],[-25,0,25]);
+	fig3.meter(1,[310,50],[-25,0,25]);
+	
+	
+	plt=plot([400,150],sys,0,[4,25],['in','out'])
+
+	</script>	
+
+	</body>
+</html>

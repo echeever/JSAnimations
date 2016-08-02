@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Op Amp Example</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+fig1=diagram([400,200]);
+
+fig1.opAmp([150,100],[275,100],['a'],-1);
+
+fig1.wire([150,115],[150,150]);
+fig1.ground([150,150]);
+fig1.node([150, 85]);
+fig1.node([275,100]);
+fig1.wire( [150, 85],[150, 50]);
+fig1.wire( [275,100],[275, 50]);
+fig1.resistor([150, 50],[275, 50],'Rf');
+fig1.resistor([50, 85],[150, 85],'Ri');
+fig1.sourceV([50,150],[50,85],'Vi');
+fig1.ground([50,150]);
+fig1.wire([275,100],[350,100]);
+fig1.wire([300,150],[350,150]);
+fig1.resistor([350,100],[350,150],'Rl');
+fig1.ground([300,150]);
+fig1.terminal([300,100],[300,150],'Vo');
+
+
+</script>
+
+</body>
+</html>

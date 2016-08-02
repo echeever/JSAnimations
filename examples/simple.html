@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Simple Example</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<br>
+<script>
+
+mySys=system()
+	.tMax(50)
+	.h(.001)
+	.spf(200);
+vars=[.2,1,1]; //b,k,m
+
+omegaBox=tBox();
+zetaBox=tBox();
+
+newP=function(){
+
+	var A=[[-vars[0]/vars[2],-vars[1]/vars[2]],
+   	       [               1,               0]];
+	var B=[];
+	var C=[[0,1]];
+	var D=[];
+	
+	var X=[0,1];
+
+	mySys.setP(A,B,C,D,X);
+	
+	var omega0=Math.sqrt(vars[1]/vars[2]);
+	var zeta=vars[0]/(2*vars[2]*omega0);
+	
+	omegaBox.set('ω = '+omega0.toFixed(2));
+	zetaBox .set('ζ = '+zeta  .toFixed(2));
+}
+
+newP();
+
+slide1=new Slider(vars,0,newP,'b: ',[0,5]);
+slide2=new Slider(vars,1,newP,'k: ',[0,5]);
+slide3=new Slider(vars,2,newP,'m:',[.1,5]);
+
+omegaBox.place();
+zetaBox.place();
+
+myDiag=diagram([400,200],mySys).lScale(40);
+
+w1=myDiag.wall([40,50],[10,100],'E');
+ax=myDiag.axis([50,100],0);
+m1=myDiag.mass(0,'m',ax,250,0,100,60);
+s1=myDiag.spring('k',ax,0,m1,-15);
+b1=myDiag.dash(['b',1],ax,0,m1, 15);
+
+myDiag.update();
+
+myPlot=plot([500,200],mySys,[0],[50,1]);
+
+</script>
+
+</body>
+</html>

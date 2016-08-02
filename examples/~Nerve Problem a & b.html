@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>Nerve Animation (a & b)</title>
+<script src="http://lpsa.swarthmore.edu/Animations/raphael.js"></script>
+<script src="http://lpsa.swarthmore.edu/Animations/linear.js"></script>
+<link rel="stylesheet" type="text/css" href="http://lpsa.swarthmore.edu/Animations/style.css"/>
+</head>
+
+<body>
+
+<h2>Animation for Nerve Problem</h2>
+<h3>Exam 2, Take-Home Problem, parts a and b</h3>
+<p>Cm = 1.57E-8 Farad, Rm = 6370 Ohm, Rj = 3570 Ohm</p>
+
+
+<br>
+<script>
+
+//////    SYSTEM     ///////
+
+Cm=.0000000157, Rm=6370, Rj=3570;
+
+A=[[-1/(Rm*Cm)-1/(Rj*Cm),1/(Rj*Cm),0,0],
+   [1/(Rj*Cm),-1/(Rm*Cm)-2/(Rj*Cm),1/(Rj*Cm),0],
+   [0,1/(Rj*Cm),-1/(Rm*Cm)-2/(Rj*Cm),1/(Rj*Cm)],
+   [0,0,1/(Rj*Cm),-1/(Rm*Cm)-1/(Rj*Cm)]];
+
+B=[[1/Cm],
+   [0],
+   [0],
+   [0]];
+   
+C=[[0,0,0,0],
+   [0,1,0,0],
+   [0,0,0,1]];
+   
+D=[[1],
+   [0],
+   [0]];
+
+sys=system(A,B,C,D).tMax(5);
+
+tscl=.1;
+sys.input(0,function(t){
+	return 100*(t-0)*(t>0)
+		  -200*(t-tscl)*(t>tscl)
+		  +100*(t-2*tscl)*(t>2*tscl)
+});
+
+
+///////////// DIAGRAM //////////////
+
+dia=diagram([650,200],sys);
+
+dia.sourceI([50,150],[50,50],['Iin',[-25,0]]);
+dia.capacitor([100,150],[100,50],['Cm',[15,15]]);
+dia.resistor([150,150],[150,50],['Rm',[15,15]]);
+dia.resistor([150,50],[250,50],['Rj',[0,15]]);
+dia.capacitor([250,150],[250,50],['Cm',[15,15]]);
+dia.resistor([300,150],[300,50],['Rm',[15,15]]);
+dia.resistor([300,50],[400,50],['Rj',[0,15]]);
+dia.capacitor([400,150],[400,50],['Cm',[15,15]]);
+dia.resistor([450,150],[450,50],['Rm',[15,15]]);
+dia.resistor([450,50],[550,50],['Rj',[0,15]]);
+dia.capacitor([550,150],[550,50],['Cm',[15,15]]);
+dia.resistor([600,150],[600,50],['Rm',[15,15]]);
+
+dia.wire([50,50],[150,50]); dia.wire([250,50],[300,50]);
+dia.wire([400,50],[450,50]); dia.wire([550,50],[600,50]);
+dia.wire([50,150],[600,150]);
+
+dia.node([100,50]); dia.node([150,50]); dia.node([250,50]);
+dia.node([300,50]); dia.node([400,50]); dia.node([450,50]);
+dia.node([550,50]); dia.node([100,150]); dia.node([150,150]);
+dia.node([250,150]); dia.node([300,150]); dia.node([400,150]);
+dia.node([450,150]); dia.node([550,150]); dia.ground([100,150]);
+
+dia.text([100,35],'e1'); dia.text([250,35],'e2');
+dia.text([400,35],'e3'); dia.text([550,35],'e4');
+
+
+//////     PLOT      ///////
+plot([600,200],sys,[0,1],[5,0,10],['Iin','e2']);
+plot([600,200],sys,[0,2],[5,0,10],['Iin','e4'],['blue','green']);
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>Scooby Animation</title>
+<script src="http://lpsa.swarthmore.edu/Animations/raphael.js"></script>
+<script src="http://lpsa.swarthmore.edu/Animations/linear.js"></script>
+<link rel="stylesheet" type="text/css" href="http://lpsa.swarthmore.edu/Animations/style.css"/>
+</head>
+
+<body>
+
+<h2>Animation for Scooby Problem</h2>
+<h3>Exam 2, Problem #3</h3>
+<p>This problem models Scooby Doo (M) standing still on a carpet (m) then
+suddenly trying to run (Torque Applied=unit step). If the floor is slippery
+(b-->0) and the carpet has low mass (m-->0), Scooby will not be able to move
+(x=0). Instead his legs will spin (Theta nonzero) and the rug will eventually
+slip out from under him (y nonzero).<br>Assuming J=M=R=1, m=b=0</p>
+
+
+<br>
+<script>
+
+//////    SYSTEM     ///////
+
+J=1, M=1, R=1, m=0, b=0;
+
+A=[[0,1],
+   [0,0]];
+
+B=[[0],
+   [1/J]];
+   
+C=[[0,0],
+   [1,0],
+   [-R,0],
+   [0,0]];
+   
+D=[[1],
+   [0],
+   [0],
+   [-1]];
+
+sys=system(A,B,C,D).tMax(40);
+sys.input(0,function(t){
+	return (t%2<1)
+		   -(t%2<1)*(t>2)   // step input
+});
+///////////// DIAGRAM //////////////
+
+dia=diagram([420,200],sys);
+floor=dia.wall([62,175],[275, 12],'N');
+
+a1=dia.axis([60,153],0);
+a2=dia.axis([60,93],0);
+
+m=dia.mass(2,'m',a1,100,-10,150,20,['b',[-90,-5]]);
+M=dia.wheel(-1,1,'M',a2,150,50);
+
+dia.aArrow(['Torque\nApplied',[50,-60]],[215,85],50,0,~1,50,1);
+
+/* The free-body diagrams for this problem are not very helpful
+	due to the assumption that m=b=0
+///////  FREE-BODY DIAGRAMS ///////
+
+dia2=diagram([600,260],sys);
+
+a3=dia2.axis([110,210],0);
+a4=dia2.axis([110,100],0);
+
+m2=dia2.mass(-1,'m',a3,200,0,150,20);
+M2=dia2.wheel(-1,-1,'M',a4,100,50);   // translating wheel
+M3=dia2.wheel(-1,1,'M',a4,300,50);   // rotating wheel
+
+// Forces on m
+dia2.arrow(-1,a4,125,100,2,['Fm',[-10,-15]]);
+dia2.arrow(-1,a4,125,120,2,['Fb',[-10,15]]);
+dia2.arrow(-1,a4,275,110,2,['Fc',[10,-15]]);
+
+// Forces on M (translational)
+dia2.arrow(-1,a4,54,-20,2,['Fc',[-10,-15]]);
+dia2.arrow(-1,a4,54,20,2,['Fm',[-10,15]]);
+
+// Forces on M (rotational
+dia2.aArrow(['Torque\nApplied',[50,-60]],[415,90],50,0,~1,50,1);
+dia2.aArrow(['FcR',[55,40]],[420,105],50,~130,-1,50,1);
+dia2.aArrow(['JTheta',[-45,-55]],[405,90],50,3,~1,-50,1);
+*/
+
+//////     PLOT      ///////
+plot([600,200],sys,[0,1,2],[12,-10,10],['Torque Applied','Theta','y']);
+
+
+</script>
+</body>
+</html>

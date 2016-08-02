@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Another Mass Flow Thermal System</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+sys1=system();
+
+fig1=diagram([500,300],sys1);
+
+fig1.vessel([100,75],[100,125],1,['θ₁',[0,35]]);
+fig1.vessel([300,75],[100,125],1,['θ₂',[0,35]]);
+
+//Unicode Subscripts: ₀₁₂₃₄₅₆₇₈₉
+
+
+fig1.pipe([ 25,150],[100,150],8);
+fig1.pipe([200,150],[300,150],8);
+fig1.pipe([400,150],[475,150],8);
+
+fig1.mixer([175,120],[160,40],16);
+fig1.coil([125,40],[125,120],27,5);
+
+fig1.mixer([340,120],[360,40],16);
+
+fig1.lArrow([ 35,135],[ 80,135],'G');
+fig1.lArrow([220,135],[280,135],'q₁');
+fig1.lArrow([420,135],[455,135],'q₂');
+
+fig1.arrow(~28,[125,35],90,0,['u','n']);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Rotating</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+J1=1.5;
+J2=1;
+B1=1;
+B2=0;
+K =1;
+
+
+sys1=system(
+	[[    0,     1,    0,     0],  //A
+	 [-K/J1,-B1/J1, K/J1,     0],
+	 [    0,     0,    0,     1],
+	 [ K/J2,     0,-K/J2,-B2/J2]],
+	[],                            //B
+	[[1,0,0,0],                    //C
+	 [0,0,1,0]],
+	[],                            //D
+	[-160,0,240,0]                 //X
+);
+
+sys1.tMax(30);
+sys1.spf(10);
+
+fig1=diagram([600,300],sys1);
+
+ax1=fig1.axisR([0,150],.25);
+
+fig1.cylinder(0,0,'J₁',ax1,100, 50,80,9,'B'); // θ₁
+fig1.cylinder(0,1,['K','n']       ,ax1,150,300, 8);
+fig1.cylinder(1,1,'J₂',ax1,450, 50,60);       // θ₂
+fig1.wall([100,241],[50,8],'n');
+
+plt1=plot([600,300],sys1,[0,1],[30,280],['θ₁','θ₂']);
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>Damped Oscillator, sawtooth input</title>
+<script src="http://lpsa.swarthmore.edu/Animations/raphael.js"></script>
+<script src="http://lpsa.swarthmore.edu/Animations/linear.js"></script>
+<link rel="stylesheet" type="text/css" href="http://lpsa.swarthmore.edu/Animations/style.css"/>
+</head>
+
+<body>
+
+<h2>Damped Oscillator</h2>
+<h3>with sawtooth input</h3>
+<p>m=2, b=.1, k=1</p>
+
+<br>
+<script>
+
+//////    SYSTEM     ///////
+
+m=2, b=.1, k=1;
+
+
+A=[[   0,   1,   0,   0,   0,   0],
+   [   0,   0,   1,   0,   0,   0],
+   [   0,-k/m,-b/m,   0,   0,   0],
+   [   0,  -k,  -b,   0,   0,   0],
+   [   0,  -k,   0,   0,   0,   0],
+   [   0,   0,  -b,   0,   0,   0]];
+
+B=[[       0],
+   [     1/m],
+   [-b/(m*m)],
+   [    -b/m],
+   [       0],
+   [    -b/m]];
+
+C=[[0,0, 0,0,0,0],
+   [1,0, 0,0,0,0],
+   [0,0, 0,-1,0,0],
+   [0,0,m,0,-1,0],
+   [0,0,m,0,0,-1]];
+   
+D=[[ 1],
+   [ 0],
+   [ -1],
+   [ 0],
+   [ 0]];
+   
+sys1=system(A,B,C,D).tMax(90);
+
+sys1.input(0,function(t){
+	return t%9
+});
+
+//////    DIAGRAMS    ///////
+
+fig1=diagram([800,200],sys1,1);
+fig1.line([400,0],[400,200],.5);
+fig1.text([65,10],'Mechanical System');
+fig1.text([460,10],'Electrical Analog');
+
+// Mechancial system
+fig1.wall([40, 60],[ 10,82],'E');
+fig1.wall([50,142],[300,10],'N');
+fig1.wall([40,141],[11,11]);
+
+ax=fig1.axis([50,101],0);
+
+m1=fig1.mass(1,'m',ax,200,-10,100,60,'b');
+
+fig1.spring('k',ax,0,m1);
+
+fig1.arrow(0,ax,200,-50,5,'u');
+
+// Electrical analog
+fig1.wire([450,150],[750,150]); fig1.wire([450,50],[750,50]);
+fig1.node([550,50]); fig1.node([550,150]); fig1.node([650,50]); fig1.node([650,150]); fig1.node([750,150]);
+fig1.sourceI([450,150],[450,50],'i_in');
+fig1.inductor([550,150],[550,50],'L=1/k');
+fig1.capacitor([650,150],[650,50],'C=m');
+fig1.resistor([750,150],[750,50],'R=1/b');
+fig1.ground([750,150]);
+fig1.lArrow([50,70],[70,70],'x');
+
+
+////  FREE-BODY DIAGRAMS ////
+
+fig2=diagram([800,200],sys1,1);
+fig2.line([400,0],[400,200],.5);
+fig2.text([70,10],'Free-Body Diagram');
+fig2.text([460,10],'Currents');
+
+// mechanical
+bx=fig2.axis([50,100],0);
+m2=fig2.mass(-1,'m',bx,145,0,100,60);
+
+fig2.arrow(0,bx,195,0,2,['F_in',[20,-15]]);
+fig2.arrow(2,bx,95,-30,2,['F_m',[-20,-15]]);
+fig2.arrow(3,bx,95,30,2,['F_b',[-20,-15]]);
+fig2.arrow(4,bx,95,0,2,['F_k',[-20,-15]]);
+
+// electrical
+fig2.wire([475,150],[700,150]); fig2.wire([475,50],[700,50]);
+fig2.wire([475,150],[475,50]); fig2.wire([550,150],[550,50]); fig2.wire([625,150],[625,50]); fig2.wire([700,150],[700,50]); 
+fig2.node([550,50]); fig2.node([550,150]); fig2.node([625,50]); fig2.node([625,150]);
+by=fig2.axis([475,100],270);
+fig2.arrow(0,by,0,0,2,['i_in',[-20,0]]);
+fig2.arrow(2,by,0,150,2,['i_C',[-20,0]]);
+fig2.arrow(3,by,0,225,2,['i_R',[-20,0]]);
+fig2.arrow(4,by,0,75,2,['i_L',[-20,0]]);
+
+
+//////     PLOT      ///////
+
+myPlot=plot([800,250],sys1,[0,2,3,4,1],[90,-36,36],['F_in','F_m','F_b','F_k','x']);
+
+</script>
+
+</body>
+</html>

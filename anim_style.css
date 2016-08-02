@@ -1,0 +1,41 @@
+﻿.container{
+	text-align:center;
+}
+svg{
+	/*width:90%;*/
+}
+.diagram, .plot{
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+}
+.diagram{
+	background-color:#FAFAFA;
+	border:solid 2px #DDD;
+}
+.plot{
+	background-color:#FAFAFF;
+	border:solid 2px #DDF;
+}
+/*
+pre, code{
+	color:#000;
+	background-color:#F7F7F7;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+}
+pre{
+	padding:6px 10px;
+	width:550px;
+	overflow:auto;
+	border: 1px dotted #DDD;
+}
+code{
+	padding:0px 4px;
+}
+*/
+@media print{
+	input[type=button]{
+		visibility:hidden;
+	}
+}
+

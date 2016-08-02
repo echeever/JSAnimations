@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Sinusoidal Thermal PWM</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+//theta, dTheta
+
+var Rv=.05;
+var Cv=1;
+
+A=[[-1/(Rv*Cv)]];
+   
+B=[[ 1/(Rv*Cv),0]];
+	
+C=[[0],
+   [0],
+   [1]];
+   
+D=[[1,0],
+   [0,1],
+   [0,0]];
+
+sys1=system(A,B,C,D);
+
+var pw=.05; //pulse width
+
+sys1.input(1,function(t){return      .5*(-Math.cos(t*Math.PI*2)+1)       });
+sys1.input(0,function(t){return ((t%pw)<(-Math.cos(t*Math.PI*2)+1)*pw/2) });
+
+sys1.h(.0002);
+sys1.spf(20);
+sys1.tMax(3);
+
+fig1=diagram([375,200],sys1);
+
+plot1=plot([700,150],sys1,[1,0,2],[3,0,1],['target','PWM','filtered'],['#090','#AAF','#D00']);
+
+//walls
+fig1.wall([100, 38],[175, 12],'S');
+fig1.wall([275, 50],[ 12,100],'W');
+fig1.wall([100,150],[175, 12],'N');
+
+//corners
+fig1.wall([274, 37],[13,13]);
+fig1.wall([274,149],[13,13]);
+
+fig1.line ([101.5,50],[101.5,150]);
+//fig1.text ([ 85, 85]);
+fig1.block([103, 50],[ 50,100],'R');
+fig1.text ([215,100],'C');
+
+fig1.meter(0,[ 50,90],[0,1],'θᵢ');
+fig1.meter(2,[330,90],[0,1],'θₒ');
+
+//makes the page reload every second: good for laying out the model; bad for most other things…
+//setTimeout(function(){document.location=''},1000);
+
+
+</script>
+
+</body>
+</html>

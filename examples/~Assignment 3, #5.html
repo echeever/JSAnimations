@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>Animation 3.5</title>
+<script src="http://lpsa.swarthmore.edu/Animations/raphael.js"></script>
+<script src="http://lpsa.swarthmore.edu/Animations/linear.js"></script>
+<link rel="stylesheet" type="text/css" href="http://lpsa.swarthmore.edu/Animations/style.css"/>
+</head>
+
+<body>
+
+<h2>One Mass on Wheels with Dashpot and Spring</h2>
+<h3>Assignment 3, Problem #5</h3>
+<p>m=5, b=4, k=20</p>
+
+
+<br>
+<script>
+
+//////    SYSTEM     ///////
+
+m=5, b=4, k=20;
+
+A=[[0,0],
+   [0,0]];
+
+B=[[0],
+   [0]];
+   
+C=[[0,0],
+   [0,0]];
+   
+D=[[1],
+   [0]];
+
+sys=system(A,B,C,D).tMax(20);
+
+sys.input(0,function(t){
+	return 2*(t%2<1)
+		   -2*(t%2<1)*(t>2)   // step with amplitude 2
+});
+
+///////////// DIAGRAM //////////////
+
+dia=diagram([500,170],sys);
+
+floor=dia.wall([62,145],[374, 12],'N');
+
+a1=dia.axis([60,90],0);
+
+m01=dia.mass(0,'',a1,15,0,2,2);
+m02=dia.mass(1,'',a1,115,0,2,2);
+m=dia.mass(1,'m',a1,260,15,80,80);
+b=dia.dash('b',a1,m01,m02,0);
+k=dia.spring('k',a1,m02,m,0);
+
+dia.arrow(0,a1,15,-60,5,'f(t)');
+
+
+///////  FREE-BODY DIAGRAM ///////
+
+dia2=diagram([500,150],sys);
+a2=dia.axis([0,75],0);
+dia2.mass(-1,'',a2,75,0,2,2);
+dia2.mass(-1,'',a2,175,0,2,2);
+dia2.mass(-1,'m',a2,320,0,80,80);
+
+// Forces on m01
+dia2.arrow(0,a2,75,0,2,['f(t)',[-15,-15]]);
+dia2.arrow(1,a2,75,40,2); // f(b)
+dia2.line([75,115],[75,75],.5);
+
+// Forces on m02
+dia2.arrow(1,a2,175,0,2); // f(k)
+dia2.arrow(1,a2,175,40,2,['f(b)',[-50,-5]]);
+dia2.line([175,75],[175,115],.5);
+
+// Forces on m
+dia2.arrow(1,a2,280,-40,2,['f(m)',[-15,-15]]);
+dia2.arrow(1,a2,280,0,2,['f(k)',[-50,-5]]);
+
+
+//////     PLOT      ///////
+
+myPlot=plot([500,250],sys,[0,1],[20,-2,2],['f(t)','Mass Position']);
+
+
+</script>
+</body>
+</html>

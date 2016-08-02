@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Seven Masses</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+	<h2>Seven Masses</h2>
+	<h3>A 14<sup>th</sup> order system</h3>
+			
+	<script>
+	
+	K=4;//.75;
+	M=1;
+	B=0;
+	
+	
+	P=-2*K/M;
+	Q=K/M;
+	R=-B/M; //damping
+	
+	_=0;
+
+	//tridiagonal
+	
+	A=[[_,_,_,_,_,_,_,  1,_,_,_,_,_,_],
+	   [_,_,_,_,_,_,_,  _,1,_,_,_,_,_],
+	   [_,_,_,_,_,_,_,  _,_,1,_,_,_,_],
+	   [_,_,_,_,_,_,_,  _,_,_,1,_,_,_],
+	   [_,_,_,_,_,_,_,  _,_,_,_,1,_,_],
+	   [_,_,_,_,_,_,_,  _,_,_,_,_,1,_],
+	   [_,_,_,_,_,_,_,  _,_,_,_,_,_,1],
+	   
+	   [P,Q,_,_,_,_,_,  R,_,_,_,_,_,_],
+	   [Q,P,Q,_,_,_,_,  _,R,_,_,_,_,_],
+	   [_,Q,P,Q,_,_,_,  _,_,R,_,_,_,_],
+	   [_,_,Q,P,Q,_,_,  _,_,_,R,_,_,_],
+	   [_,_,_,Q,P,Q,_,  _,_,_,_,R,_,_],
+	   [_,_,_,_,Q,P,Q,  _,_,_,_,_,R,_],
+	   [_,_,_,_,_,Q,P,  _,_,_,_,_,_,R]],
+	
+	B=[[_],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   
+	   [Q],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   [_]];
+	
+	C=[[_,_,_,_,_,_,_,  _,_,_,_,_,_,_,],
+	   [1,_,_,_,_,_,_,  _,_,_,_,_,_,_,],
+	   [_,1,_,_,_,_,_,  _,_,_,_,_,_,_,],
+	   [_,_,1,_,_,_,_,  _,_,_,_,_,_,_,],
+	   [_,_,_,1,_,_,_,  _,_,_,_,_,_,_,],
+	   [_,_,_,_,1,_,_,  _,_,_,_,_,_,_,],
+	   [_,_,_,_,_,1,_,  _,_,_,_,_,_,_,],
+	   [_,_,_,_,_,_,1,  _,_,_,_,_,_,_,]];
+	
+	D=[[1],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   [_],
+	   [_]];
+	
+	sys=system(A,B,C,D);
+	
+	amp=1;
+	freq=2;
+	
+	sys.input(0,function(t){
+		return amp*Math.sin(freq*t)*(freq*t<Math.PI*1);
+	});
+	
+	sys.h(.0025);
+	sys.spf(40);
+	//sys.fps(20);
+	//sys.tMax(100);
+	dia=diagram([900,150],sys).lScale(50);
+	
+	//walls
+	dia.wall([ 50, 99],[825, 12],'N');
+	dia.wall([875, 60],[ 12, 30],'W');
+	
+	//just one for now...
+	a1=dia.axis([0,75],0);
+	
+	//make elements
+	m0=dia.mass(0  ,'' ,a1,100, 0, 5,5);
+	m1=dia.mass(1  ,'m₁' ,a1,200, 8,30,30);
+	m2=dia.mass(2  ,'m₂' ,a1,300, 8,30,30);
+	m3=dia.mass(3  ,'m₃' ,a1,400, 8,30,30);
+	m4=dia.mass(4  ,'m₄' ,a1,500, 8,30,30);
+	m5=dia.mass(5  ,'m₅' ,a1,600, 8,30,30);
+	m6=dia.mass(6  ,'m₆' ,a1,700, 8,30,30);
+	m7=dia.mass(7  ,'m₇' ,a1,800, 8,30,30);
+	
+	//Unicode Subscripts: ₀₁₂₃₄₅₆₇₈₉
+	
+	dia.spring('k',a1,m0,m1);
+	dia.spring('k',a1,m1,m2);
+	dia.spring('k',a1,m2,m3);
+	dia.spring('k',a1,m3,m4);
+	dia.spring('k',a1,m4,m5);
+	dia.spring('k',a1,m5,m6);
+	dia.spring('k',a1,m6,m7);
+	dia.spring('k',a1,m7,875);
+	
+	//draw everything
+	dia.update();
+/*	
+	//0 means all.
+	plt=plot([1000,300],sys,0,[40,1],
+	    ['u','y₁','y₂','y₃','y₄','y₅','y₆','y₇'],
+	    ['#000','#CD0006','#D1A700','#42D306','#1DD252','#007BD2','#0013D3','#CB00D3']);
+*/	
+	</script>	
+
+	</body>
+</html>

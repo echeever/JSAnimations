@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>Nerve Animation (c-f)</title>
+<script src="http://lpsa.swarthmore.edu/Animations/raphael.js"></script>
+<script src="http://lpsa.swarthmore.edu/Animations/linear.js"></script>
+<link rel="stylesheet" type="text/css" href="http://lpsa.swarthmore.edu/Animations/style.css"/>
+</head>
+
+<body>
+
+<h2>Animation for Nerve Problem</h2>
+<h3>Exam 2, Take-Home Problem, parts c-f</h3>
+<p>Cm = 1.57E-8 Farad, Rm = 6370 Ohm, Rj = 3570 Ohm</p>
+<p>cm = 2.49E-8 Farad, rm = 4010 Ohm, rj = 1410 Ohm</p>
+
+
+<br>
+<script>
+
+//////    SYSTEM     ///////
+
+J=1, M=1, R=1, m=0, b=0;
+Cm=.0000000157, Rm=6370, Rj=3570;
+cm=.0000000249, rm=4010, rj=1410;
+K=(Rj/2)*(Rj/2)+2*(Rj/2)*(rj/2);
+K2=2*K;
+
+A=[[-1/(Rm*Cm)-1/(Rj*Cm),1/(Rj*Cm),0,0,0,0],
+   [1/(Rj*Cm),-1/(Rm*Cm)-1/(Rj*Cm)-Rj/(K2*Cm)-rj/(K2*Cm),0,rj/K2,Rj/K2,0],
+   [0,0,-1/(Rm*Cm)-1/(Rj*Cm),1/(Rj*Cm),0,0],
+   [0,rj/(K2*Cm),1/(Rj*Cm),-1/(Rm*Cm)-1/(Rj*Cm)-Rj/(K2*Cm)-rj/(K2*Cm),Rj/(K2*Cm),0],
+   [0,Rj/(K2*cm),0,Rj/(K2*cm),-1/(rm*cm)-1/(rj*cm)-2*Rj/(K2*cm),1/(rj*cm)],
+   [0,0,0,0,1/(rj*cm),-1/(rm*cm)-1/(rj*cm)]];
+
+B=[[1/Cm],
+   [0],
+   [0],
+   [0],
+   [0],
+   [0]];
+   
+C=[[0,0,0,0,0,0],
+   [0,1,0,0,0,0],
+   [0,0,0,0,0,1]];
+   
+D=[[1],
+   [0],
+   [0]];
+
+sys=system(A,B,C,D).tMax(5);
+
+tscl=.1;
+sys.input(0,function(t){
+	return 100*(t-0)*(t>0)
+		  -200*(t-tscl)*(t>tscl)
+		  +100*(t-2*tscl)*(t>2*tscl)
+});
+
+
+///////////// DIAGRAM //////////////
+
+dia=diagram([750,400],sys);
+
+dia.sourceI([50,150],[50,50],['Iin',[-25,0]]);
+dia.capacitor([100,150],[100,50],['Cm',[15,15]]);
+dia.resistor([150,150],[150,50],['Rm',[15,15]]);
+dia.resistor([150,50],[250,50],['Rj',[0,15]]);
+dia.capacitor([250,150],[250,50],['Cm',[15,15]]);
+dia.resistor([300,150],[300,50],['Rm',[15,15]]);
+dia.resistor([300,50],[400,50],['Rj/2',[0,15]]);
+
+dia.capacitor([100,350],[100,250],['Cm',[15,15]]);
+dia.resistor([150,350],[150,250],['Rm',[15,15]]);
+dia.resistor([150,250],[250,250],['Rj',[0,15]]);
+dia.capacitor([250,350],[250,250],['Cm',[15,15]]);
+dia.resistor([300,350],[300,250],['Rm',[15,15]]);
+dia.resistor([300,250],[400,250],['Rj/2',[0,15]]);
+
+dia.resistor([400,200],[500,200],['rj/2',[0,15]]);
+dia.capacitor([500,300],[500,200],['cm',[15,15]]);
+dia.resistor([550,300],[550,200],['rm',[15,15]]);
+dia.resistor([550,200],[650,200],['rj',[0,15]]);
+dia.capacitor([650,300],[650,200],['cm',[15,15]]);
+dia.resistor([700,300],[700,200],['rm',[15,15]]);
+
+
+dia.wire([50,50],[150,50]); dia.wire([250,50],[300,50]);
+dia.wire([50,150],[300,150]); dia.wire([100,250],[150,250]);
+dia.wire([250,250],[300,250]); dia.wire([100,350],[300,350]);
+dia.wire([400,250],[400,50]); dia.wire([500,200],[550,200]);
+dia.wire([650,200],[700,200]); dia.wire([500,300],[700,300]);
+
+
+dia.node([100,50]); dia.node([150,50]); dia.node([250,50]);
+dia.node([300,50]); dia.node([100,150]); dia.node([150,150]);
+dia.node([250,150]); dia.node([150,250]); dia.node([250,250]);
+dia.node([300,250]); dia.node([100,350]); dia.node([150,350]);
+dia.node([250,350]); dia.node([500,200]); dia.node([550,200]);
+dia.node([650,200]); dia.node([500,300]); dia.node([550,300]);
+dia.node([650,300]);
+
+dia.ground([100,150]); dia.ground([100,350]); dia.ground([500,300]);
+
+
+dia.text([100,35],'e1'); dia.text([250,35],'e2');
+dia.text([100,235],'e3'); dia.text([250,235],'e4');
+dia.text([500,185],'e5'); dia.text([650,185],'e6');
+
+
+//////     PLOT      ///////
+plot([600,200],sys,[0,1],[5,0,10],['Iin','e2']);
+plot([600,200],sys,[0,2],[5,0,10],['Iin','e6'],['blue','green']);
+
+
+</script>
+</body>
+</html>

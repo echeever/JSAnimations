@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>A Thermal Model</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+//theta1, theta2
+
+var C1=5;
+var C2=10;
+var R1=.75;
+var R2=1;
+
+var A=[[-1/(C1*R1),           1/(C1*R1)],
+       [ 1/(C2*R1),-1/(C2*R1)-1/(C2*R2)]];
+       
+var B=[[1],
+       [0]];
+
+var C=[[1,0],
+       [0,1],
+       [0,0],
+       [1/(C1*R1),-1/(C2*R1)],
+       [0,1/(C2*R2)]];
+       
+var D=[[0],
+       [0],
+       [1],
+       [0],
+       [0]];
+
+var X=[0,0];
+sys1=system(A,B,C,D,X);
+
+function stepF(t){
+	return 10*(t%10<1)*(t<40);
+}
+
+sys1.input(0,stepF);
+sys1.tMax(80);
+sys1.spf(20);
+
+fig1=diagram([500,200],sys1);
+
+plt1=plot([500,200],sys1,[2,0,1],[80,0,12],['qᵢ','θ₁','θ₂']);
+
+
+//walls
+fig1.wall([100, 38],[350, 12],'S');
+fig1.wall([ 88, 50],[ 12,100],'E');
+fig1.wall([100,150],[350, 12],'N');
+
+//corners
+fig1.wall([88, 38],[13,13]);
+fig1.wall([88,150],[13,13]);
+
+fig1.text ([145,66],'C₁');
+fig1.block([190, 50],[40,100],'R₁');
+fig1.text ([290,66],'C₂');
+fig1.block([350, 50],[70,100],'R₂');
+fig1.text ([440,100],'θₐ');
+
+fig1.coil (  [75,100],[115,100]);
+fig1.arrow(2,[50,102],0,2,'qᵢ');
+
+fig1.meter(0,[150,100],[0,12],'θ₁');
+fig1.meter(1,[290,100],[0,6],'θ₂');
+
+fig1.arrow(3,[210-20,130],0,20);
+fig1.arrow(4,[385-35,130],0,20);
+
+
+//makes the page reload every second: good for laying out the model; bad for most other things…
+//setTimeout(function(){document.location=''},1000);
+
+</script>
+
+<em>C₁</em>=5<br>
+<em>C₂</em>=10<br>
+<em>R₁</em>=.75<br>
+<em>R₂</em>=1<br>
+<em>qᵢ</em>: pulses of duration 1 with amplitude 10 every 10 units[?]
+
+</body>
+</html>

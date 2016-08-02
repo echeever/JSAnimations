@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Frequency Response</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+var m=1;
+var b=.5;
+var k=1.6;
+
+sys1=system([[0,1],
+             [-k/m,-b/m]],
+            [[0],
+             [k/m]],
+            [[1,0],
+             [0,0]],
+            [[0],
+             [1]])
+//	.input(0,function(t){return Math.sin(Math.log((t+150)/150)*t)})
+	.input(0,function(t){return Math.sin(t/350*t)})
+	.tMax(500)
+	.h(.025);
+fig1=diagram([400,200],sys1).lScale(20);
+
+//fig1.wall([40, 60],[ 10,82],'E');
+fig1.wall([50,142],[300,10],'N');
+//fig1.wall([40,141],[11,11]);
+
+ax=fig1.axis([50,101],0);
+
+m0=fig1.mass(1,['u','n'],ax,50,0,5,5);
+m1=fig1.mass(0,'m',ax,200,-10,100,60,'b');
+
+fig1.spring('k',ax,m0,m1);
+
+//fig1.arrow(1,ax,200,-50,20,'u');
+
+
+myPlot=plot([700,250],sys1,[1,0],[500,2.5],['u','y'],['#E88','#33D']);
+
+
+
+
+</script>
+
+</body>
+</html>

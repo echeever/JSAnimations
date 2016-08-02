@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Pulley and Mass</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+<script>
+	r=35;
+	sys=system(
+		[[ 0,1],     //A
+		 [-1,-.1]],
+		[],           //B
+		[[1,0],
+		 [-360/(2*Math.PI*r),0],
+		 [2,0]],      //C
+		[],           //D
+		[-30,0]        //X
+		 );
+	sys.tMax(60);
+	dia=diagram([200,350],sys);
+//	plt=plot([500,150],sys,[0],[20,30]);
+	
+	
+	dia.wall([70,15],[60,10],'s');
+	ax1=dia.axis([100,0],90);
+	w1=dia.wheel(0,1,['J,M','e'],ax1,150,r,'n');
+	dia.spring('',ax1,25,w1);
+
+	dia.wall([100+r/2,250],[r,10],'n');	
+	ax2=dia.axis([100+r,0],90);
+	m1=dia.mass(0,'',ax2,150);
+	dia.rope('',ax2,m1,250);
+	
+	ax3=dia.axis([100-r,0],90);
+	m2=dia.mass(0,'',ax3,150);
+	m3=dia.mass(2,'m',ax3,250,0,30,40);
+	dia.rope('',ax3,m2,m3);
+	
+</script>
+
+</body>
+</html>

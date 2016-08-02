@@ -1,0 +1,89 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Linear</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+	<h2>Three flywheels, no damping</h2>
+	<h3>A 6<sup>th</sup> order system with three modes of vibration</h3>
+	<p>This system has three linked masses. </p>
+	<p>For mode 1 IC&#39;s → x<sub>1</sub>(0)=90,&nbsp; x<sub>2</sub>(0)=128,&nbsp; 
+	x<sub>3</sub>(0)=90, slowest frequency<br>For mode 2 IC&#39;s → x<sub>1</sub>(0)=-128,&nbsp; 
+	x<sub>2</sub>(0)=0,&nbsp; x<sub>3</sub>(0)=128, frequency 1.8 times faster 
+	than mode 1<br>For mode 3 IC&#39;s → x<sub>1</sub>(0)=90,&nbsp; x<sub>2</sub>(0)=-128,&nbsp; 
+	x<sub>3</sub>(0)=90, frequency 2.4 times faster than mode 1 </p>
+<form action="#" name="IC3" onsubmit="setIC3FromForm(this); return false">
+	<p style="text-align:center"><strong>Enter initial conditions<br></strong>
+	x<sub>1</sub>(0):<input name="q1" style="width: 50px" value="0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	x<sub>2</sub>(0):<input name="q2" style="width: 50px" value="90">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	x<sub>3</sub>(0):<input name="q3" style="width: 50px" value="120">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;<input type="submit" value="Set Initial Conditions">
+	<input type="Reset"> </p>
+</form>
+<script>	
+	_=0;
+
+	A=[[_,_,_,  1,_,_],
+	   [_,_,_,  _,1,_],
+	   [_,_,_,  _,_,1],
+	   
+	   [-2,1,_,  _,_,_],
+	   [1,-2,1,  _,_,_],  
+	   [_,1,-2,  _,_,_]];
+	   
+	B=[];
+	
+	C=[[1,_,_,  _,_,_],
+	   [_,1,_,  _,_,_],
+	   [_,_,1,  _,_,_]];
+	   
+	D=[];
+	
+	q1=parseFloat(document.IC3.q1.value,10);
+	q2=parseFloat(document.IC3.q2.value,10);
+	q3=parseFloat(document.IC3.q3.value,10);
+
+	sys=system(A,B,C,D,[q1, q2, q3, 0, 0, 0]);
+	
+	sys.tMax(25);
+	sys.h(0.01);
+	fig3=diagram([700,240],sys);
+	
+	//walls
+	lwall =fig3.wall([ 38, 95],[ 12, 50],'E');
+	lwall =fig3.wall([600, 95],[ 12, 50],'W');
+
+	//a rotation axis
+	ax1=fig3.axisR([0,120],.25);
+
+//	fig3.wall([15,65],[70,70]);
+	K1=fig3.cylinder(~0,0,['Kr','n'],ax1,50,100, 8);  //leftmost spring
+	J1=fig3.cylinder(0,0,['J1','s'],ax1,150,50,75);   //leftmost flywheel
+	K2=fig3.cylinder(0,1,['Kr','n'],ax1,200,100, 8);  
+	J2=fig3.cylinder(1,1,['J1','s'],ax1,300,50,75);
+	K3=fig3.cylinder(1,2,['Kr','n'],ax1,350,100, 8);  
+	J3=fig3.cylinder(2,2,['J2','s'],ax1,450,50,75);
+	K4=fig3.cylinder(2,~2,['Kr','n'],ax1,500,100, 8);  
+	
+	fig3.aArrow('theta_1',ax1,175,85,~0,~1,-45,-1);
+	fig3.aArrow('theta_2',ax1,325,85,~0,~1,-45,-1);
+	fig3.aArrow('theta_3',ax1,475,85,~0,~1,-45,-1);
+	
+	plt=plot([700,200],sys,[0,1,2],[25,150],['theta_1','theta_2','theta_3']);
+	function setIC3FromForm(form) {
+		var x1=parseFloat(form.q1.value,10);
+		var x2=parseFloat(form.q2.value,10);
+		var x3=parseFloat(form.q3.value,10);
+		X0=[x1, x2, x3, 0, 0, 0];
+		sys.initial(X0,0);
+		fig3.update();
+	}
+</script>
+</body>
+</html>

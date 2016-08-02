@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>More Rotating</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+J1=5;
+J2=5;
+J3=1;
+K =10;
+B =2;
+
+sys1=system(
+	[[    0, 1,    0,    0, 0,    0],  //A
+	 [-K/J1, 0, K/J1,    0, 0,    0],
+	 [    0, 0,    0,    1, 0,    0],
+	 [ K/J2, 0,-K/J2,-B/J2, 0, B/J2],
+	 [    0, 0,    0,    0, 0,    1],
+	 [    0, 0,    0, B/J3, 0,-B/J3]],
+ 
+	[],                            //B
+	
+	[[1,0,0,0,0,0],                //C
+	 [0,0,1,0,0,0],
+	 [0,0,0,0,1,0]],
+	 
+	[],                            //D
+	
+	[-90,0,90,0,90,0]             //X
+);
+
+sys1.tMax(30);
+sys1.spf(10);
+
+fig1=diagram([600,300],sys1);
+
+ax1=fig1.axisR([0,150],.25);
+
+fig1.cylinder(0,0,['J₁'],ax1,105, 40,100);
+fig1.cylinder(0,1,['K','n'] ,ax1,145, 85,  8);
+fig1.cylinder(1,1,['J₂'],ax1,230, 40,100);
+fig1.cylinder(1,1,   '',      ax1,270,135,  5);
+fig1.cylinder(1,1,   '',      ax1,405,  5, 50);
+fig1.pad(           'B',      ax1,410, 15, 50);
+fig1.cylinder(2,2,['J₃'],ax1,425, 40, 50);
+
+fig1.aArrow('θ₁',ax1,125,105,~0,~1,-45,-1);
+fig1.aArrow('θ₂',ax1,250,105,~0,~1,-45,-1);
+fig1.aArrow('θ₃',ax1,445, 55,~0,~1,-45,-1);
+
+
+plt1=plot([600,150],sys1,[0,1,2],[30,90],['θ₁','θ₂','θ₃']);
+
+</script>
+<p style="text-align:center;">J<sub>1</sub>=J<sub>2</sub>=5 kg-m<sup>2</sup>, J<sub>3</sub>=1 kg-m<sup>2</sup>.  B=2 N-m-s/rad.  K=10 N-m/rad. <br />
+Initial conditions: &theta;<sub>1</sub>(0)=-90&deg;,  &theta;<sub>2</sub>(0)=+90&deg;,  &theta;<sub>1</sub>(0)=+90&deg;,  all initial velocities = 0. </p>
+</body>
+</html>

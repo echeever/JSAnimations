@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title>Galvanometer and Motor</title>
+	<link rel="shortcut icon" href="../favicon.png" >
+	<script type="text/javascript" src="../raphael.js"></script>
+	<script type="text/javascript" src="../linear.js"></script>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+
+<body>
+
+<script>
+
+//sys=system([[0,1],[-1,0]],[],[[1,0],[0,1]],[],[0,-10]).h(.005);
+
+sys=system([[0,0],[1,0]],
+           [[1],[0]],
+           [[0,0],[1,0],[0,.25]],
+           [[1],[0],[0]],
+           [0,-40]).h(.005);
+
+sys.input(0,function(t){return 5*Math.sin(t*1.4)});
+
+dia=diagram([400,400],sys).rScale(4);
+plt=plot([400,120],sys,0,[20,10],['τ','ω','θ']);
+
+dia.galv(0,0,[200,100],[200,70]);
+dia.wire([200,30],[50,30]);
+dia.wire([200,170],[50,170]);
+dia.terminal([200,170],[200,30]);
+dia.sourceI([50,170],[50,30]);
+dia.arrow(0,[125,25],0,5,'i');
+dia.aArrow(['τ',[0,-10]],[200,100],20,0,0,10,2);
+
+
+dia.motor(2,0,[200,300],[200,70]);
+dia.wire([200,230],[50,230]);
+dia.wire([200,370],[50,370]);
+dia.terminal([200,230],[200,370]);
+dia.sourceI([50,370],[50,230]);
+dia.arrow(0,[125,225],0,5,'i');
+dia.aArrow(['τ',[0,-10]],[200,300],20,2,0,10,2);
+
+</script>
+
+</body>
+</html>
